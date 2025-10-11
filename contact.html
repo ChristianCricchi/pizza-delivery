@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tony's Pizza Delivery - Contact</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <h1>🍕 Tony's Pizza</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="order.html" class="nav-link">Order</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="contact.html" class="nav-link active">Contact</a>
+                    </li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="contact-hero">
+            <div class="container">
+                <h1>Contact Us</h1>
+                <p>We'd love to hear from you! Get in touch with any questions or feedback.</p>
+            </div>
+        </section>
+
+        <section class="contact-content">
+            <div class="container">
+                <div class="contact-layout">
+                    <!-- Contact Information -->
+                    <div class="contact-info">
+                        <h2>Get in Touch</h2>
+                        
+                        <div class="contact-card">
+                            <div class="contact-icon">📞</div>
+                            <div class="contact-details">
+                                <h3>Phone</h3>
+                                <p>(555) 123-PIZZA</p>
+                                <p>Call us for quick orders!</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-card">
+                            <div class="contact-icon">📧</div>
+                            <div class="contact-details">
+                                <h3>Email</h3>
+                                <p>info@tonyspizza.com</p>
+                                <p>We'll respond within 24 hours</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-card">
+                            <div class="contact-icon">📍</div>
+                            <div class="contact-details">
+                                <h3>Address</h3>
+                                <p>123 Pizza Street<br>
+                                   Foodville, FV 12345</p>
+                                <p>Come visit our restaurant!</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-card">
+                            <div class="contact-icon">🕒</div>
+                            <div class="contact-details">
+                                <h3>Hours</h3>
+                                <p>Monday - Sunday<br>
+                                   11:00 AM - 11:00 PM</p>
+                                <p>Open every day of the week!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form -->
+                    <div class="contact-form-section">
+                        <h2>Send us a Message</h2>
+                        <form class="contact-form" id="contactForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">First Name</label>
+                                    <input type="text" id="firstName" name="firstName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Last Name</label>
+                                    <input type="text" id="lastName" name="lastName" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phoneContact">Phone Number (Optional)</label>
+                                <input type="tel" id="phoneContact" name="phoneContact">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <select id="subject" name="subject" required>
+                                    <option value="">Select a subject...</option>
+                                    <option value="general">General Inquiry</option>
+                                    <option value="feedback">Feedback</option>
+                                    <option value="complaint">Complaint</option>
+                                    <option value="catering">Catering Services</option>
+                                    <option value="employment">Employment</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" rows="6" required 
+                                          placeholder="Tell us how we can help you..."></textarea>
+                            </div>
+                            
+                            <button type="submit" class="submit-btn">Send Message</button>
+                        </form>
+                        
+                        <div class="form-success" id="formSuccess" style="display: none;">
+                            <h3>✅ Message Sent Successfully!</h3>
+                            <p>Thank you for contacting us. We'll get back to you soon!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Section -->
+                <div class="faq-section">
+                    <h2>Frequently Asked Questions</h2>
+                    <div class="faq-grid">
+                        <div class="faq-item">
+                            <h3>What are your delivery areas?</h3>
+                            <p>We deliver within a 5-mile radius of our restaurant. Enter your address during checkout to confirm delivery availability.</p>
+                        </div>
+                        <div class="faq-item">
+                            <h3>How long does delivery take?</h3>
+                            <p>Most deliveries arrive within 30-45 minutes. During busy periods, it may take up to 60 minutes.</p>
+                        </div>
+                        <div class="faq-item">
+                            <h3>Do you offer gluten-free options?</h3>
+                            <p>Yes! We have gluten-free pizza crusts available. Please mention any dietary restrictions when ordering.</p>
+                        </div>
+                        <div class="faq-item">
+                            <h3>What payment methods do you accept?</h3>
+                            <p>We accept cash, credit cards (Visa, MasterCard, American Express), and digital payments.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Tony's Pizza</h3>
+                    <p>Serving delicious pizzas since 2013</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <p>📞 (555) 123-PIZZA</p>
+                    <p>📧 info@tonyspizza.com</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Hours</h3>
+                    <p>Mon-Sun: 11:00 AM - 11:00 PM</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Tony's Pizza. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

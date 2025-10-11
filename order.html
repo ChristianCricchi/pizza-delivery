@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tony's Pizza Delivery - Order</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <h1>🍕 Tony's Pizza</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="order.html" class="nav-link active">Order</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="contact.html" class="nav-link">Contact</a>
+                    </li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="order-hero">
+            <div class="container">
+                <h1>Order Your Pizza</h1>
+                <p>Build your perfect pizza and we'll deliver it hot to your door!</p>
+            </div>
+        </section>
+
+        <section class="order-content">
+            <div class="container">
+                <div class="order-layout">
+                    <!-- Food Category & Sorting -->
+                    <div class="menu-section">
+                        <div class="menu-controls">
+                            <label for="categorySelect">Category:</label>
+                            <select id="categorySelect">
+                                <option value="classic">Classic Pizzas</option>
+                                <option value="premium">Premium Pizzas</option>
+                                <option value="specialty">Specialty Pizzas</option>
+                            </select>
+                            <label for="sortSelect">Sort by:</label>
+                            <select id="sortSelect">
+                                <option value="name">Name</option>
+                                <option value="price">Price</option>
+                                <option value="calories">Calories</option>
+                            </select>
+                        </div>
+                        <div id="menuItems" class="menu-items"></div>
+                    </div>
+
+                    <!-- Basket on the right -->
+                    <div class="cart-section">
+                        <h2>Your Basket</h2>
+                        <div class="cart" id="cart"></div>
+                        <div class="cart-total">
+                            <div class="total-row">
+                                <span>Subtotal:</span>
+                                <span id="subtotal">$0.00</span>
+                            </div>
+                            <div class="total-row">
+                                <span>Delivery Fee:</span>
+                                <span id="delivery">$2.99</span>
+                            </div>
+                            <div class="total-row total-final">
+                                <span>Total:</span>
+                                <span id="total">$0.00</span>
+                            </div>
+                        </div>
+                        <button type="button" class="checkout-btn" id="startOrderBtn">Start Order Dialogue</button>
+                        <form id="orderForm" style="display:none; margin-top:2rem;">
+                            <div class="form-group">
+                                <label for="customerName">Full Name</label>
+                                <input type="text" id="customerName" name="customerName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Delivery Address</label>
+                                <textarea id="address" name="address" rows="3" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="notes">Special Instructions (Optional)</label>
+                                <textarea id="notes" name="notes" rows="2"></textarea>
+                            </div>
+                            <button type="submit" class="checkout-btn" id="checkoutBtn" disabled>
+                                Place Order
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Modal Dialogue for Contact Details -->
+                    <div id="orderModal" class="modal">
+                        <div class="modal-content">
+                            <span class="close-btn" id="closeModalBtn">&times;</span>
+                            <h2>Contact Details</h2>
+                            <form id="modalContactForm">
+                                <div class="form-group">
+                                    <label for="modalName">Full Name</label>
+                                    <input type="text" id="modalName" name="modalName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="modalPhone">Phone Number</label>
+                                    <input type="tel" id="modalPhone" name="modalPhone" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="modalAddress">Delivery Address</label>
+                                    <textarea id="modalAddress" name="modalAddress" rows="3" required></textarea>
+                                </div>
+                                <div class="modal-actions">
+                                    <button type="button" class="continue-btn" id="continueModalBtn">Continue</button>
+                                    <button type="button" class="cancel-btn" id="cancelModalBtn">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Modal Dialogue for Order Confirmation -->
+                    <div id="confirmModal" class="modal">
+                        <div class="modal-content">
+                            <span class="close-btn" id="closeConfirmBtn">&times;</span>
+                            <h2>Order Confirmed!</h2>
+                            <div id="confirmOrderDetails"></div>
+                            <div class="modal-actions">
+                                <button type="button" class="continue-btn" id="closeBasketBtn">Close & Reset Basket</button>
+                                <button type="button" class="cancel-btn" id="backToContactBtn">Go Back to Contact Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Tony's Pizza</h3>
+                    <p>Serving delicious pizzas since 2013</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <p>📞 (555) 123-PIZZA</p>
+                    <p>📧 info@tonyspizza.com</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Hours</h3>
+                    <p>Mon-Sun: 11:00 AM - 11:00 PM</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Tony's Pizza. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
