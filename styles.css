@@ -576,6 +576,28 @@ p {
     transform: none;
 }
 
+/* Inline error messages */
+.error-text {
+    color: #c0392b;
+    font-size: 0.9rem;
+    margin-top: 6px;
+}
+
+.input-invalid {
+    border-color: #e74c3c !important;
+    background: #fff6f6;
+}
+
+.form-error-summary {
+    display: block;
+    background: #fcebea;
+    color: #7f1d1d;
+    border: 1px solid #f5c6cb;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin: 0.75rem 0 1rem 0;
+}
+
 /* ===================================
    CONTACT PAGE STYLES
    =================================== */

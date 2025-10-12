@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeOrderPage();
     initializeContactPage();
     setupOrderModal();
+    setupInlineValidation();
 });
 
 /**
@@ -49,23 +50,58 @@ function initializeNavigation() {
             hamburger.classList.toggle('active');
             navMenu.classList.toggle('active');
             if (next) {
-                // focus first link
-                const firstLink = navMenu.querySelector('.nav-link');
-                if (firstLink) firstLink.focus();
+                openMobileMenu();
             } else {
-                hamburger.focus();
+                closeMobileMenu();
             }
         };
         hamburger.addEventListener('click', toggle);
 
-        // Close mobile menu when clicking on a link
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function() {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
-                hamburger.setAttribute('aria-expanded', 'false');
+                closeMobileMenu();
             });
         });
+
+        // Focus trap and ESC handling for mobile menu
+        function handleMenuKeydown(e) {
+            if (!navMenu.classList.contains('active')) return;
+            const focusable = navMenu.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+            if (focusable.length === 0) return;
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (e.key === 'Tab') {
+                if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                }
+            } else if (e.key === 'Escape') {
+                closeMobileMenu();
+                hamburger.focus();
+            }
+        }
+        function openMobileMenu() {
+            const firstLink = navMenu.querySelector('.nav-link');
+            if (firstLink) firstLink.focus();
+            document.addEventListener('keydown', handleMenuKeydown);
+            // close if clicking outside
+            document.addEventListener('click', outsideClickClose);
+        }
+        function closeMobileMenu() {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            hamburger.setAttribute('aria-expanded', 'false');
+            document.removeEventListener('keydown', handleMenuKeydown);
+            document.removeEventListener('click', outsideClickClose);
+        }
+        function outsideClickClose(e) {
+            if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                closeMobileMenu();
+            }
+        }
     }
 }
 
@@ -297,18 +333,15 @@ function updateCartDisplay() {
         });
         cartElement.innerHTML = cartHTML;
     }
-    // Update totals
     if (subtotalElement) subtotalElement.textContent = `$${cartTotal.toFixed(2)}`;
     const finalTotal = cart.length > 0 ? cartTotal + deliveryFee : 0;
     if (totalElement) totalElement.textContent = `$${finalTotal.toFixed(2)}`;
 
-    // Toggle Start Order availability
     if (startOrderBtn) {
         startOrderBtn.disabled = cart.length === 0;
         startOrderBtn.title = cart.length === 0 ? 'Add items to your basket to continue' : '';
     }
 
-    // Persist cart
     try { localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart)); } catch(_) {}
 }
 
@@ -464,9 +497,21 @@ function setupOrderModal() {
     if (startOrderBtn) {
         startOrderBtn.addEventListener('click', function() {
             if (cart.length === 0) {
-                alert('Please add items to your cart before continuing.');
+                // inline summary error near cart total
+                const cartDiv = document.querySelector('.cart-total');
+                if (cartDiv && !document.getElementById('cart-summary-error')) {
+                    const warn = document.createElement('div');
+                    warn.id = 'cart-summary-error';
+                    warn.className = 'form-error-summary';
+                    warn.setAttribute('role', 'alert');
+                    warn.textContent = 'Please add items to your cart before continuing.';
+                    cartDiv.parentElement.insertBefore(warn, cartDiv);
+                }
                 return;
             }
+            // remove any previous summary error
+            const prev = document.getElementById('cart-summary-error');
+            if (prev) prev.remove();
             lastFocusedElement = document.activeElement;
             modal.style.display = 'flex';
             const firstField = document.getElementById('modalName');
@@ -489,17 +534,14 @@ function setupOrderModal() {
     // Continue to next step
     if (continueModalBtn) {
         continueModalBtn.onclick = function() {
+            // clear any previous errors
+            ['modalName','modalPhone','modalAddress'].forEach(id => { const el = document.getElementById(id); if (el) clearError(el); });
+            if (!validateModalFields()) {
+                return;
+            }
             const name = document.getElementById('modalName').value.trim();
             const phone = document.getElementById('modalPhone').value.trim();
             const address = document.getElementById('modalAddress').value.trim();
-            if (!name || !phone || !address) {
-                alert('Please fill in all contact details.');
-                return;
-            }
-            if (!validatePhone(phone)) {
-                alert('Please enter a valid phone number.');
-                return;
-            }
             closeModal();
             document.getElementById('orderForm').style.display = 'block';
             document.getElementById('customerName').value = name;
@@ -668,6 +710,71 @@ function validateEmail(email) {
 function validatePhone(phone) {
     const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
     return phoneRegex.test(phone.replace(/[\s\-\(\)]/g, ''));
+}
+
+// Inline error helpers
+function showError(input, message) {
+    clearError(input);
+    input.classList.add('input-invalid');
+    const err = document.createElement('div');
+    err.className = 'error-text';
+    err.textContent = message;
+    input.setAttribute('aria-invalid', 'true');
+    input.setAttribute('aria-describedby', input.id + '-error');
+    err.id = input.id + '-error';
+    input.parentElement.appendChild(err);
+}
+function clearError(input) {
+    input.classList.remove('input-invalid');
+    input.removeAttribute('aria-invalid');
+    input.removeAttribute('aria-describedby');
+    const existing = document.getElementById(input.id + '-error');
+    if (existing) existing.remove();
+}
+
+// Simple phone mask and normalization (digits and leading +)
+function setupPhoneMask(el) {
+    if (!el) return;
+    el.addEventListener('input', () => {
+        const start = el.selectionStart;
+        let v = el.value.replace(/[^\d+\s()-]/g, '');
+        // ensure only one leading +
+        v = v.replace(/(?!^)[+]/g, '');
+        el.value = v;
+        el.setSelectionRange(start, start);
+    });
+}
+
+// Enhance modal and order form validation
+function setupInlineValidation() {
+    const modalForm = document.getElementById('modalContactForm');
+    if (modalForm) {
+        const name = document.getElementById('modalName');
+        const phone = document.getElementById('modalPhone');
+        const address = document.getElementById('modalAddress');
+        [name, phone, address].forEach(i => i && i.addEventListener('input', () => clearError(i)));
+        setupPhoneMask(phone);
+    }
+    const orderForm = document.getElementById('orderForm');
+    if (orderForm) {
+        const name = document.getElementById('customerName');
+        const phone = document.getElementById('phone');
+        const address = document.getElementById('address');
+        [name, phone, address].forEach(i => i && i.addEventListener('input', () => clearError(i)));
+        setupPhoneMask(phone);
+    }
+}
+
+// Validate modal fields, show inline errors
+function validateModalFields() {
+    const name = document.getElementById('modalName');
+    const phone = document.getElementById('modalPhone');
+    const address = document.getElementById('modalAddress');
+    let ok = true;
+    if (!name.value.trim()) { showError(name, 'Please enter your full name.'); ok = false; }
+    if (!phone.value.trim() || !validatePhone(phone.value.trim())) { showError(phone, 'Enter a valid phone number (e.g. +441234567890).'); ok = false; }
+    if (!address.value.trim()) { showError(address, 'Please enter your delivery address.'); ok = false; }
+    return ok;
 }
 
 // ===================================
