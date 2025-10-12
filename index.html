@@ -3,39 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tony's Pizza - Authentic Italian pizzas delivered hot. Order classic, premium, and specialty pizzas with fast delivery.">
+    <meta name="theme-color" content="#e74c3c">
     <title>Tony's Pizza Delivery - Welcome</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <a href="#main" class="skip-link">Skip to content</a>
     <!-- Navigation bar -->
     <header>
-        <nav class="navbar">
+        <nav class="navbar" aria-label="Primary">
             <div class="nav-container">
                 <div class="logo">
                     <h1>🍕 Tony's Pizza</h1>
                 </div>
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a href="index.html" class="nav-link active">Home</a>
+                <ul class="nav-menu" role="menubar" id="menu">
+                    <li class="nav-item" role="none">
+                        <a href="index.html" class="nav-link active" role="menuitem">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a href="order.html" class="nav-link">Order</a>
+                    <li class="nav-item" role="none">
+                        <a href="order.html" class="nav-link" role="menuitem">Order</a>
                     </li>
-                    <li class="nav-item">
-                        <a href="contact.html" class="nav-link">Contact</a>
+                    <li class="nav-item" role="none">
+                        <a href="contact.html" class="nav-link" role="menuitem">Contact</a>
                     </li>
                 </ul>
-                <div class="hamburger">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </div>
+                <button class="hamburger" aria-label="Toggle navigation" aria-controls="menu" aria-expanded="false">
+                    <span class="bar" aria-hidden="true"></span>
+                    <span class="bar" aria-hidden="true"></span>
+                    <span class="bar" aria-hidden="true"></span>
+                </button>
             </div>
         </nav>
     </header>
 
     <!-- Centered Welcome Section -->
-    <main>
+    <main id="main">
         <section class="welcome-section">
             <div class="welcome-container">
                 <div class="welcome-content">
@@ -45,7 +49,7 @@
                         <a href="order.html" class="cta-button">Order Now</a>
                     </div>
                     <div class="welcome-image">
-                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=500&q=80" alt="Delicious Pizza" />
+                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=500&q=80" alt="Fresh baked pizza with cheese and basil" width="500" height="333" loading="lazy" />
                     </div>
                 </div>
             </div>
@@ -75,6 +79,6 @@
             </div>
         </div>
     </footer>
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>

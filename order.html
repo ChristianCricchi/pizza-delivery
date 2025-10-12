@@ -3,37 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Order delicious pizzas from Tony's Pizza. Customize, sort by price or calories, and get fast delivery.">
     <title>Tony's Pizza Delivery - Order</title>
     <link rel="stylesheet" href="styles.css">
+    <meta name="theme-color" content="#e74c3c">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
 <body>
+    <a href="#main" class="skip-link">Skip to content</a>
     <header>
-        <nav class="navbar">
+        <nav class="navbar" aria-label="Primary">
             <div class="nav-container">
                 <div class="logo">
                     <h1>🍕 Tony's Pizza</h1>
                 </div>
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a href="index.html" class="nav-link">Home</a>
+                <ul class="nav-menu" role="menubar" id="menu">
+                    <li class="nav-item" role="none">
+                        <a href="index.html" class="nav-link" role="menuitem">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a href="order.html" class="nav-link active">Order</a>
+                    <li class="nav-item" role="none">
+                        <a href="order.html" class="nav-link active" role="menuitem">Order</a>
                     </li>
-                    <li class="nav-item">
-                        <a href="contact.html" class="nav-link">Contact</a>
+                    <li class="nav-item" role="none">
+                        <a href="contact.html" class="nav-link" role="menuitem">Contact</a>
                     </li>
                 </ul>
-                <div class="hamburger">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </div>
+                <button class="hamburger" aria-label="Toggle navigation" aria-controls="menu" aria-expanded="false">
+                    <span class="bar" aria-hidden="true"></span>
+                    <span class="bar" aria-hidden="true"></span>
+                    <span class="bar" aria-hidden="true"></span>
+                </button>
             </div>
         </nav>
     </header>
 
-    <main>
+    <main id="main">
         <section class="order-hero">
             <div class="container">
                 <h1>Order Your Pizza</h1>
@@ -66,7 +70,7 @@
                     <!-- Basket on the right -->
                     <div class="cart-section">
                         <h2>Your Basket</h2>
-                        <div class="cart" id="cart"></div>
+                        <div class="cart" id="cart" aria-live="polite"></div>
                         <div class="cart-total">
                             <div class="total-row">
                                 <span>Subtotal:</span>
@@ -89,7 +93,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="phone">Phone Number</label>
-                                <input type="tel" id="phone" name="phone" required>
+                                <input type="tel" id="phone" name="phone" inputmode="tel" placeholder="e.g. +441234567890" required>
                             </div>
                             <div class="form-group">
                                 <label for="address">Delivery Address</label>
@@ -97,7 +101,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="notes">Special Instructions (Optional)</label>
-                                <textarea id="notes" name="notes" rows="2"></textarea>
+                                <textarea id="notes" name="notes" rows="2" placeholder="Gate code, allergies, etc."></textarea>
                             </div>
                             <button type="submit" class="checkout-btn" id="checkoutBtn" disabled>
                                 Place Order
@@ -106,10 +110,10 @@
                     </div>
 
                     <!-- Modal Dialogue for Contact Details -->
-                    <div id="orderModal" class="modal">
+                    <div id="orderModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="orderModalTitle">
                         <div class="modal-content">
-                            <span class="close-btn" id="closeModalBtn">&times;</span>
-                            <h2>Contact Details</h2>
+                            <button class="close-btn" id="closeModalBtn" aria-label="Close">&times;</button>
+                            <h2 id="orderModalTitle">Contact Details</h2>
                             <form id="modalContactForm">
                                 <div class="form-group">
                                     <label for="modalName">Full Name</label>
@@ -117,7 +121,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="modalPhone">Phone Number</label>
-                                    <input type="tel" id="modalPhone" name="modalPhone" required>
+                                    <input type="tel" id="modalPhone" name="modalPhone" inputmode="tel" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="modalAddress">Delivery Address</label>
@@ -131,10 +135,10 @@
                         </div>
                     </div>
                     <!-- Modal Dialogue for Order Confirmation -->
-                    <div id="confirmModal" class="modal">
+                    <div id="confirmModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
                         <div class="modal-content">
-                            <span class="close-btn" id="closeConfirmBtn">&times;</span>
-                            <h2>Order Confirmed!</h2>
+                            <button class="close-btn" id="closeConfirmBtn" aria-label="Close">&times;</button>
+                            <h2 id="confirmModalTitle">Order Confirmed!</h2>
                             <div id="confirmOrderDetails"></div>
                             <div class="modal-actions">
                                 <button type="button" class="continue-btn" id="closeBasketBtn">Close & Reset Basket</button>
@@ -170,6 +174,6 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>

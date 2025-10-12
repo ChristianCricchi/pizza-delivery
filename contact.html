@@ -3,37 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact Tony's Pizza for questions, feedback, catering, and more. We're here to help.">
+    <meta name="theme-color" content="#e74c3c">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <title>Tony's Pizza Delivery - Contact</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <a href="#main" class="skip-link">Skip to content</a>
     <header>
-        <nav class="navbar">
+        <nav class="navbar" aria-label="Primary">
             <div class="nav-container">
                 <div class="logo">
                     <h1>🍕 Tony's Pizza</h1>
                 </div>
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a href="index.html" class="nav-link">Home</a>
+                <ul class="nav-menu" role="menubar" id="menu">
+                    <li class="nav-item" role="none">
+                        <a href="index.html" class="nav-link" role="menuitem">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a href="order.html" class="nav-link">Order</a>
+                    <li class="nav-item" role="none">
+                        <a href="order.html" class="nav-link" role="menuitem">Order</a>
                     </li>
-                    <li class="nav-item">
-                        <a href="contact.html" class="nav-link active">Contact</a>
+                    <li class="nav-item" role="none">
+                        <a href="contact.html" class="nav-link active" role="menuitem">Contact</a>
                     </li>
                 </ul>
-                <div class="hamburger">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </div>
+                <button class="hamburger" aria-label="Toggle navigation" aria-controls="menu" aria-expanded="false">
+                    <span class="bar" aria-hidden="true"></span>
+                    <span class="bar" aria-hidden="true"></span>
+                    <span class="bar" aria-hidden="true"></span>
+                </button>
             </div>
         </nav>
     </header>
 
-    <main>
+    <main id="main">
         <section class="contact-hero">
             <div class="container">
                 <h1>Contact Us</h1>
@@ -190,6 +194,6 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>
