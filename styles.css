@@ -12,6 +12,7 @@ body {
     line-height: 1.6;
     color: #333;
     background-color: #fff;
+    padding-top: 70px; /* offset fixed header height */
 }
 
 .container {
@@ -53,8 +54,10 @@ p {
     background-color: #2c3e50; /* match footer background */
     padding: 0.5rem 0;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    position: sticky;
+    position: fixed; /* was sticky */
     top: 0;
+    left: 0;
+    width: 100%;
     z-index: 1000;
 }
 
@@ -981,6 +984,8 @@ footer {
     .nav-menu { gap: 2.5rem; }
     .nav-link { font-size: 1.05rem; padding: 0.6rem 1.1rem; }
     .logo h1 { font-size: 2rem; }
+    /* Slightly taller on very large screens; keep sufficient body offset if needed */
+    body { padding-top: 72px; }
 }
 
 @media screen and (min-width: 1600px) {
