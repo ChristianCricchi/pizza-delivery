@@ -267,8 +267,8 @@ p {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 40vh;
-    padding: 40px 0;
+    min-height: 5vh;
+    padding: 20px 0; /* was 40px */
     margin-bottom: 24px;
 }
 .order-hero .container {
@@ -771,6 +771,25 @@ body.page-order main {
     margin-bottom: 1rem;
 }
 
+/* Make contact-hero match order-hero */
+.contact-hero {
+    background: #e74c3c;
+    color: white;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 5vh;
+    padding: 20px 0; /* match order-hero */
+    margin-bottom: 24px;
+}
+.contact-hero .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 /* ===================================
    FOOTER
    =================================== */
@@ -904,7 +923,7 @@ footer {
     .hero,
     .order-hero,
     .contact-hero {
-        padding: 40px 0;
+        padding: 20px 0; /* was 40px */
     }
 
     .features,
