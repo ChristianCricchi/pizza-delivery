@@ -586,6 +586,12 @@ body.page-order main {
 /* Ensure inline order form stays hidden (modal-only flow) */
 #orderForm[hidden] { display: none !important; }
 
+/* Modal: ensure textarea fills width and has consistent styling */
+#orderModal .form-group textarea {
+    width: 100%;
+    resize: vertical;
+}
+
 /* ===================================
    CONTACT PAGE STYLES
    =================================== */

@@ -420,6 +420,7 @@ function setupOrderModal() {
             const name = document.getElementById('modalName').value.trim();
             const phone = document.getElementById('modalPhone').value.trim();
             const address = document.getElementById('modalAddress').value.trim();
+            const notes = (document.getElementById('modalNotes')?.value || '').trim();
             if (!name || !phone || !address) {
                 alert('Please fill in all contact details.');
                 return;
@@ -435,6 +436,7 @@ function setupOrderModal() {
                 name,
                 phone,
                 address,
+                notes,
                 total: cartTotal + deliveryFee,
                 items: cart
             });
@@ -446,6 +448,9 @@ function setupOrderModal() {
         let html = `<p><strong>Order Confirmed!</strong></p>`;
         html += `<p><strong>Total:</strong> £${details.total.toFixed(2)}</p>`;
         html += `<p><strong>Contact Details:</strong><br>Name: ${details.name}<br>Phone: ${details.phone}<br>Address: ${details.address}</p>`;
+        if (details.notes) {
+            html += `<p><strong>Special Instructions:</strong> ${details.notes}</p>`;
+        }
         html += `<p><strong>Items:</strong></p><ul>`;
         details.items.forEach(item => {
             html += `<li>${item.name} x${item.quantity} (£${(item.price * item.quantity).toFixed(2)})</li>`;
