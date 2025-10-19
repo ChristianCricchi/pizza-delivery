@@ -630,24 +630,9 @@ body.page-order main {
     text-align: center;
 }
 
-/* Order Confirmed modal: raise close (X) by 2cm */
+/* Order Confirmed modal: raise close (X) by ~0.7cm from base */
 #confirmModal .close-btn {
-    transform: translateY(-2cm);
-}
-
-/* Match Order Confirmed close (X) position to Contact Details modal */
-#confirmModal .close-btn {
-    transform: translateY(0.7cm);
-}
-
-/* Order Confirmed modal: raise close (X) by 1.5cm */
-#confirmModal .close-btn {
-    transform: translateY(-1.5cm);
-}
-
-/* Order Confirmed modal: lower close (X) by additional 0.25cm (total ~0.75cm) */
-#confirmModal .close-btn {
-    transform: translateY(0.75cm);
+    transform: translateY(-0.7cm);
 }
 
 /* Make Contact Details and Order Confirmed modals the same size */
