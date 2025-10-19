@@ -608,6 +608,13 @@ body.page-order main {
     transform: translateY(0.5cm);
 }
 
+/* Modal actions: equalize Continue and Cancel button sizes */
+.modal-actions .continue-btn,
+.modal-actions .cancel-btn {
+    width: 160px;
+    text-align: center;
+}
+
 /* ===================================
    CONTACT PAGE STYLES
    =================================== */
