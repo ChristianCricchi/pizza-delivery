@@ -406,13 +406,13 @@ function setupOrderModal() {
             modal.style.display = 'flex';
         });
     }
-    // Close modal
-    function closeModal() {
+    // Close modal (optionally reset form)
+    function closeModal(reset = true) {
         modal.style.display = 'none';
-        modalContactForm.reset();
+        if (reset && modalContactForm) modalContactForm.reset();
     }
-    if (closeModalBtn) closeModalBtn.onclick = closeModal;
-    if (cancelModalBtn) cancelModalBtn.onclick = closeModal;
+    if (closeModalBtn) closeModalBtn.onclick = () => closeModal(true);
+    if (cancelModalBtn) cancelModalBtn.onclick = () => closeModal(true);
     // Continue to next step
     if (continueModalBtn) {
         continueModalBtn.onclick = function() {
@@ -429,8 +429,8 @@ function setupOrderModal() {
                 alert('Please enter a valid phone number.');
                 return;
             }
-            // Keep the order form hidden; proceed entirely within modals
-            closeModal();
+            // Hide without resetting so data remains if user goes back
+            closeModal(false);
             // Show confirmation modal with details
             showConfirmModal({
                 name,
@@ -472,6 +472,9 @@ function setupOrderModal() {
     if (backToContactBtn) backToContactBtn.onclick = function() {
         confirmModal.style.display = 'none';
         document.getElementById('orderModal').style.display = 'flex';
+        // Optional: focus first field for quick edits
+        const nameInput = document.getElementById('modalName');
+        if (nameInput) nameInput.focus();
     };
     // Close confirm modal
     if (closeConfirmBtn) closeConfirmBtn.onclick = function() {
