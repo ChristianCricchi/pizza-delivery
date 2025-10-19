@@ -650,6 +650,12 @@ body.page-order main {
     margin-top: 1.5rem;
 }
 
+/* Center modal titles */
+.modal-content h2 {
+    text-align: center;
+    width: 100%;
+}
+
 /* ===================================
    CONTACT PAGE STYLES
    =================================== */
