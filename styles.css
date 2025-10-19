@@ -635,6 +635,36 @@ body.page-order main {
     transform: translateY(-2cm);
 }
 
+/* Match Order Confirmed close (X) position to Contact Details modal */
+#confirmModal .close-btn {
+    transform: translateY(0.7cm);
+}
+
+/* Order Confirmed modal: raise close (X) by 1.5cm */
+#confirmModal .close-btn {
+    transform: translateY(-1.5cm);
+}
+
+/* Order Confirmed modal: lower close (X) by additional 0.25cm (total ~0.75cm) */
+#confirmModal .close-btn {
+    transform: translateY(0.75cm);
+}
+
+/* Make Contact Details and Order Confirmed modals the same size */
+#orderModal .modal-content,
+#confirmModal .modal-content {
+    max-width: 520px; /* slightly wider modal */
+    width: calc(100% - 2rem); /* keep good padding on small screens */
+}
+
+/* Center modal action buttons */
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
 /* ===================================
    CONTACT PAGE STYLES
    =================================== */
@@ -1124,7 +1154,7 @@ select:focus,
 .modal-actions {
     display: flex;
     gap: 1rem;
-    justify-content: flex-end;
+    justify-content: center;
     margin-top: 1.5rem;
 }
 .continue-btn {
