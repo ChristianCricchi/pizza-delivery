@@ -592,6 +592,22 @@ body.page-order main {
     resize: vertical;
 }
 
+/* Order modal tweaks: slightly wider and higher close button */
+#orderModal .close-btn { top: 10px; }
+@media screen and (min-width: 600px) {
+  #orderModal .modal-content { max-width: 520px; }
+}
+
+/* Contact Details modal: raise close button by 1cm */
+#orderModal .close-btn {
+    top: calc(18px - 1cm);
+}
+
+/* Modal close button: lower by additional 0.5cm */
+.modal .close-btn {
+    transform: translateY(0.5cm);
+}
+
 /* ===================================
    CONTACT PAGE STYLES
    =================================== */
@@ -1069,7 +1085,7 @@ select:focus,
 }
 .close-btn {
     position: absolute;
-    top: 18px;
+    top: 26px; /* lowered by ~0.20cm (~8px) */
     right: 22px;
     font-size: 2rem;
     color: #e74c3c;
