@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="page-order">
+    <a href="#main" class="skip-link">Skip to main content</a>
     <header>
         <nav class="navbar">
             <div class="nav-container">
@@ -33,7 +34,7 @@
         </nav>
     </header>
 
-    <main>
+    <main id="main">
         <section class="order-hero">
             <div class="container">
                 <h1>Order Your Pizza</h1>
@@ -64,9 +65,9 @@
                     </div>
 
                     <!-- Basket on the right -->
-                    <div class="cart-section">
-                        <h2>Your Basket</h2>
-                        <div class="cart" id="cart"></div>
+                    <div class="cart-section" role="region" aria-labelledby="basketHeading">
+                        <h2 id="basketHeading">Your Basket</h2>
+                        <div class="cart" id="cart" aria-live="polite" aria-atomic="true"></div>
                         <div class="cart-total">
                             <div class="total-row">
                                 <span>Subtotal:</span>
@@ -87,10 +88,10 @@
                     </div>
 
                     <!-- Modal Dialogue for Contact Details -->
-                    <div id="orderModal" class="modal">
-                        <div class="modal-content">
-                            <span class="close-btn" id="closeModalBtn">&times;</span>
-                            <h2>Contact Details</h2>
+                    <div id="orderModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
+                        <div class="modal-content" tabindex="-1">
+                            <span class="close-btn" id="closeModalBtn" aria-label="Close contact details dialog">&times;</span>
+                            <h2 id="contactModalTitle">Contact Details</h2>
                             <form id="modalContactForm">
                                 <div class="form-group">
                                     <label for="modalName">Full Name</label>
@@ -116,10 +117,10 @@
                         </div>
                     </div>
                     <!-- Modal Dialogue for Order Confirmation -->
-                    <div id="confirmModal" class="modal">
-                        <div class="modal-content">
-                            <span class="close-btn" id="closeConfirmBtn">&times;</span>
-                            <h2>Confirm Order</h2>
+                    <div id="confirmModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
+                        <div class="modal-content" tabindex="-1">
+                            <span class="close-btn" id="closeConfirmBtn" aria-label="Close confirmation dialog">&times;</span>
+                            <h2 id="confirmModalTitle">Confirm Order</h2>
                             <div id="confirmOrderDetails"></div>
                             <div class="modal-actions">
                                 <button type="button" class="continue-btn" id="closeBasketBtn">Confirm Order</button>
@@ -155,6 +156,6 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script defer src="script.js"></script>
 </body>
 </html>

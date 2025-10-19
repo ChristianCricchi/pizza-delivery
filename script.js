@@ -390,11 +390,13 @@ function showOrderConfirmation(orderData) {
 function setupOrderModal() {
     const startOrderBtn = document.getElementById('startOrderBtn');
     const modal = document.getElementById('orderModal');
+    const modalContent = document.querySelector('#orderModal .modal-content');
     const closeModalBtn = document.getElementById('closeModalBtn');
     const cancelModalBtn = document.getElementById('cancelModalBtn');
     const continueModalBtn = document.getElementById('continueModalBtn');
     const modalContactForm = document.getElementById('modalContactForm');
     const confirmModal = document.getElementById('confirmModal');
+    const confirmContent = document.querySelector('#confirmModal .modal-content');
     const closeConfirmBtn = document.getElementById('closeConfirmBtn');
     const closeBasketBtn = document.getElementById('closeBasketBtn');
     const backToContactBtn = document.getElementById('backToContactBtn');
@@ -404,6 +406,10 @@ function setupOrderModal() {
     if (startOrderBtn) {
         startOrderBtn.addEventListener('click', function() {
             modal.style.display = 'flex';
+            // focus first field for accessibility
+            const nameInput = document.getElementById('modalName');
+            if (nameInput) nameInput.focus();
+            else if (modalContent) modalContent.focus();
         });
     }
     // Close modal (optionally reset form)
@@ -458,34 +464,62 @@ function setupOrderModal() {
         html += `</ul>`;
         confirmOrderDetails.innerHTML = html;
         confirmModal.style.display = 'flex';
+        if (confirmContent) confirmContent.focus();
     }
-    // Close/Reset basket
+    // Close/Reset basket on Confirm
     if (closeBasketBtn) closeBasketBtn.onclick = function() {
         confirmModal.style.display = 'none';
         cart = [];
         updateCartDisplay();
-        document.getElementById('orderForm').reset();
-        document.getElementById('orderForm').style.display = 'none';
-        document.getElementById('startOrderBtn').style.display = 'block';
+        const orderFormEl = document.getElementById('orderForm');
+        if (orderFormEl) {
+            orderFormEl.reset();
+            orderFormEl.style.display = 'none';
+        }
+        const startBtn = document.getElementById('startOrderBtn');
+        if (startBtn) startBtn.style.display = 'block';
+        // Clear contact details for next order attempt
+        if (modalContactForm) modalContactForm.reset();
+        // Return focus to start button for continuity
+        if (startBtn) startBtn.focus();
     };
     // Go back to contact details
     if (backToContactBtn) backToContactBtn.onclick = function() {
         confirmModal.style.display = 'none';
         document.getElementById('orderModal').style.display = 'flex';
-        // Optional: focus first field for quick edits
+        // focus first field for quick edits
         const nameInput = document.getElementById('modalName');
         if (nameInput) nameInput.focus();
+        else if (modalContent) modalContent.focus();
     };
-    // Close confirm modal
+    // Close confirm modal via X
     if (closeConfirmBtn) closeConfirmBtn.onclick = function() {
         confirmModal.style.display = 'none';
+        // Return focus to Start Order button
+        const startBtn = document.getElementById('startOrderBtn');
+        if (startBtn) startBtn.focus();
     };
-    // Close modal on outside click
-    window.onclick = function(event) {
+    // Overlay click close for both modals
+    window.addEventListener('click', function(event) {
         if (event.target === modal) {
             closeModal();
+        } else if (event.target === confirmModal) {
+            confirmModal.style.display = 'none';
         }
-    };
+    });
+    // Esc to close active modal
+    window.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            if (confirmModal && confirmModal.style.display === 'flex') {
+                confirmModal.style.display = 'none';
+                const startBtn = document.getElementById('startOrderBtn');
+                if (startBtn) startBtn.focus();
+            } else if (modal && modal.style.display === 'flex') {
+                closeModal();
+                if (startOrderBtn) startOrderBtn.focus();
+            }
+        }
+    });
 }
 
 // ===================================
