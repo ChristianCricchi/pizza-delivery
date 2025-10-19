@@ -608,11 +608,31 @@ body.page-order main {
     transform: translateY(0.5cm);
 }
 
+/* Modal close button: adjust vertical position to 1.2cm lower */
+.modal .close-btn {
+    transform: translateY(1.2cm);
+}
+
+/* Contact Details modal: raise close (X) by 0.5cm (negate global offset) */
+#orderModal .close-btn {
+    transform: translateY(0);
+}
+
+/* Contact Details modal: lower close (X) by additional 0.20cm */
+#orderModal .close-btn {
+    transform: translateY(0.7cm); /* previously 0.5cm globally; now 0.7cm for this modal */
+}
+
 /* Modal actions: equalize Continue and Cancel button sizes */
 .modal-actions .continue-btn,
 .modal-actions .cancel-btn {
     width: 160px;
     text-align: center;
+}
+
+/* Order Confirmed modal: raise close (X) by 2cm */
+#confirmModal .close-btn {
+    transform: translateY(-2cm);
 }
 
 /* ===================================
