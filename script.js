@@ -9,16 +9,6 @@
 let cart = [];
 let cartTotal = 0;
 const deliveryFee = 2.99;
-const CART_STORAGE_KEY = 'tonys_pizza_cart_v1';
-
-// Load cart from storage early
-try {
-    const saved = localStorage.getItem(CART_STORAGE_KEY);
-    if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) cart = parsed;
-    }
-} catch(_) {}
 
 // ===================================
 // NAVIGATION FUNCTIONALITY
@@ -32,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeOrderPage();
     initializeContactPage();
     setupOrderModal();
-    setupInlineValidation();
 });
 
 /**
@@ -43,65 +32,18 @@ function initializeNavigation() {
     const navMenu = document.querySelector('.nav-menu');
 
     if (hamburger && navMenu) {
-        const toggle = function() {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            const next = !expanded;
-            hamburger.setAttribute('aria-expanded', String(next));
+        hamburger.addEventListener('click', function() {
             hamburger.classList.toggle('active');
             navMenu.classList.toggle('active');
-            if (next) {
-                openMobileMenu();
-            } else {
-                closeMobileMenu();
-            }
-        };
-        hamburger.addEventListener('click', toggle);
-
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function() {
-                closeMobileMenu();
-            });
         });
 
-        // Focus trap and ESC handling for mobile menu
-        function handleMenuKeydown(e) {
-            if (!navMenu.classList.contains('active')) return;
-            const focusable = navMenu.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
-            if (focusable.length === 0) return;
-            const first = focusable[0];
-            const last = focusable[focusable.length - 1];
-            if (e.key === 'Tab') {
-                if (e.shiftKey && document.activeElement === first) {
-                    e.preventDefault();
-                    last.focus();
-                } else if (!e.shiftKey && document.activeElement === last) {
-                    e.preventDefault();
-                    first.focus();
-                }
-            } else if (e.key === 'Escape') {
-                closeMobileMenu();
-                hamburger.focus();
-            }
-        }
-        function openMobileMenu() {
-            const firstLink = navMenu.querySelector('.nav-link');
-            if (firstLink) firstLink.focus();
-            document.addEventListener('keydown', handleMenuKeydown);
-            // close if clicking outside
-            document.addEventListener('click', outsideClickClose);
-        }
-        function closeMobileMenu() {
-            hamburger.classList.remove('active');
-            navMenu.classList.remove('active');
-            hamburger.setAttribute('aria-expanded', 'false');
-            document.removeEventListener('keydown', handleMenuKeydown);
-            document.removeEventListener('click', outsideClickClose);
-        }
-        function outsideClickClose(e) {
-            if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
-                closeMobileMenu();
-            }
-        }
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
     }
 }
 
@@ -165,10 +107,9 @@ function initializeOrderPage() {
         // Event listeners for controls
         document.getElementById('categorySelect').addEventListener('change', renderMenu);
         document.getElementById('sortSelect').addEventListener('change', renderMenu);
-        // Start order dialogue button (only if modal not present)
+        // Start order dialogue button
         const startOrderBtn = document.getElementById('startOrderBtn');
-        const hasModal = !!document.getElementById('orderModal');
-        if (startOrderBtn && !hasModal) {
+        if (startOrderBtn) {
             startOrderBtn.addEventListener('click', function() {
                 document.getElementById('orderForm').style.display = 'block';
                 startOrderBtn.style.display = 'none';
@@ -210,7 +151,7 @@ function renderMenu() {
                 <p>${item.ingredients}</p>
                 <span class="item-calories">${item.calories} cal</span>
             </div>
-            <div class="item-price">$${item.price.toFixed(2)}</div>
+            <div class="item-price">£${item.price.toFixed(2)}</div>
             <div class="item-action">
                 <input type="number" min="1" max="99" value="1" class="quantity-input" id="qty-${category}-${item.name.replace(/\s/g,'')}">
                 <button class="add-btn" onclick="addVariableToCart('${item.name}', ${item.price}, ${item.calories}, '${item.ingredients}', '${category}')">Add</button>
@@ -304,7 +245,6 @@ function updateCartDisplay() {
     const cartElement = document.getElementById('cart');
     const subtotalElement = document.getElementById('subtotal');
     const totalElement = document.getElementById('total');
-    const startOrderBtn = document.getElementById('startOrderBtn');
     if (!cartElement) return;
     if (cart.length === 0) {
         cartElement.innerHTML = '<div class="empty-cart"><p>Your basket is empty. Add some delicious pizzas!</p></div>';
@@ -319,30 +259,24 @@ function updateCartDisplay() {
                 <div class="cart-item">
                     <div class="item-details">
                         <div class="item-name">${item.name}</div>
-                        <div class="item-info">${item.ingredients || ''} ${item.calories ? `| <span class="item-calories">${item.calories} cal</span>` : ''}</div>
+                        <div class="item-info">${item.ingredients} | <span class="item-calories">${item.calories} cal</span></div>
                         <div class="item-controls">
-                            <button class="qty-btn" onclick="updateQuantity('${item.name.replace(/'/g, "\\'")}', -1)">-</button>
+                            <button class="qty-btn" onclick="updateQuantity('${item.name}', -1)">-</button>
                             <span class="quantity">${item.quantity}</span>
-                            <button class="qty-btn" onclick="updateQuantity('${item.name.replace(/'/g, "\\'")}', 1)">+</button>
-                            <button class="remove-btn" onclick="removeFromCart('${item.name.replace(/'/g, "\\'")}')">Remove</button>
+                            <button class="qty-btn" onclick="updateQuantity('${item.name}', 1)">+</button>
+                            <button class="remove-btn" onclick="removeFromCart('${item.name}')">Remove</button>
                         </div>
                     </div>
-                    <div class="item-total">$${itemTotal.toFixed(2)}</div>
+                    <div class="item-total">£${itemTotal.toFixed(2)}</div>
                 </div>
             `;
         });
         cartElement.innerHTML = cartHTML;
     }
-    if (subtotalElement) subtotalElement.textContent = `$${cartTotal.toFixed(2)}`;
+    // Update totals
+    if (subtotalElement) subtotalElement.textContent = `£${cartTotal.toFixed(2)}`;
     const finalTotal = cart.length > 0 ? cartTotal + deliveryFee : 0;
-    if (totalElement) totalElement.textContent = `$${finalTotal.toFixed(2)}`;
-
-    if (startOrderBtn) {
-        startOrderBtn.disabled = cart.length === 0;
-        startOrderBtn.title = cart.length === 0 ? 'Add items to your basket to continue' : '';
-    }
-
-    try { localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart)); } catch(_) {}
+    if (totalElement) totalElement.textContent = `£${finalTotal.toFixed(2)}`;
 }
 
 /**
@@ -361,6 +295,7 @@ function updateCheckoutButton() {
  * @param {string} itemName - Name of the added item
  */
 function showAddToCartFeedback(itemName) {
+    // Create temporary feedback element
     const feedback = document.createElement('div');
     feedback.style.cssText = `
         position: fixed;
@@ -373,11 +308,16 @@ function showAddToCartFeedback(itemName) {
         z-index: 1000;
         animation: slideIn 0.3s ease;
     `;
-    feedback.setAttribute('role', 'status');
-    feedback.setAttribute('aria-live', 'polite');
     feedback.textContent = `${itemName} added to cart!`;
+    
     document.body.appendChild(feedback);
-    setTimeout(() => { if (feedback.parentNode) feedback.parentNode.removeChild(feedback); }, 2000);
+    
+    // Remove after 2 seconds
+    setTimeout(() => {
+        if (feedback.parentNode) {
+            feedback.parentNode.removeChild(feedback);
+        }
+    }, 2000);
 }
 
 /**
@@ -447,7 +387,7 @@ function processOrder(orderData) {
 function showOrderConfirmation(orderData) {
     const orderNumber = Math.floor(Math.random() * 10000) + 1000;
     
-    alert(`🍕 Order Confirmed! 🍕\n\nOrder #${orderNumber}\nTotal: $${orderData.total.toFixed(2)}\n\nEstimated delivery time: 30-45 minutes\n\nThank you for choosing Tony's Pizza!`);
+    alert(`🍕 Order Confirmed! 🍕\n\nOrder #${orderNumber}\nTotal: £${orderData.total.toFixed(2)}\n\nEstimated delivery time: 30-45 minutes\n\nThank you for choosing Tony's Pizza!`);
 }
 
 // ===================================
@@ -466,139 +406,90 @@ function setupOrderModal() {
     const backToContactBtn = document.getElementById('backToContactBtn');
     const confirmOrderDetails = document.getElementById('confirmOrderDetails');
     if (!modal) return;
-
-    let lastFocusedElement = null;
-
-    function trapFocus(container, e) {
-        const focusable = container.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-        if (focusable.length === 0) return;
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-        if (e.key === 'Tab') {
-            if (e.shiftKey && document.activeElement === first) {
-                e.preventDefault();
-                last.focus();
-            } else if (!e.shiftKey && document.activeElement === last) {
-                e.preventDefault();
-                first.focus();
-            }
-        } else if (e.key === 'Escape') {
-            // close whichever modal is open
-            if (container.parentElement && container.parentElement.id === 'orderModal') {
-                closeModal();
-            } else if (container.parentElement && container.parentElement.id === 'confirmModal') {
-                confirmModal.style.display = 'none';
-                if (lastFocusedElement) lastFocusedElement.focus();
-            }
-        }
-    }
-
     // Open modal
     if (startOrderBtn) {
         startOrderBtn.addEventListener('click', function() {
-            if (cart.length === 0) {
-                // inline summary error near cart total
-                const cartDiv = document.querySelector('.cart-total');
-                if (cartDiv && !document.getElementById('cart-summary-error')) {
-                    const warn = document.createElement('div');
-                    warn.id = 'cart-summary-error';
-                    warn.className = 'form-error-summary';
-                    warn.setAttribute('role', 'alert');
-                    warn.textContent = 'Please add items to your cart before continuing.';
-                    cartDiv.parentElement.insertBefore(warn, cartDiv);
-                }
-                return;
-            }
-            // remove any previous summary error
-            const prev = document.getElementById('cart-summary-error');
-            if (prev) prev.remove();
-            lastFocusedElement = document.activeElement;
             modal.style.display = 'flex';
-            const firstField = document.getElementById('modalName');
-            if (firstField) firstField.focus();
         });
     }
-
     // Close modal
     function closeModal() {
         modal.style.display = 'none';
         modalContactForm.reset();
-        if (lastFocusedElement) lastFocusedElement.focus();
     }
     if (closeModalBtn) closeModalBtn.onclick = closeModal;
     if (cancelModalBtn) cancelModalBtn.onclick = closeModal;
-
-    // Keyboard trap
-    modal.addEventListener('keydown', (e) => trapFocus(modal.querySelector('.modal-content'), e));
-
     // Continue to next step
     if (continueModalBtn) {
         continueModalBtn.onclick = function() {
-            // clear any previous errors
-            ['modalName','modalPhone','modalAddress'].forEach(id => { const el = document.getElementById(id); if (el) clearError(el); });
-            if (!validateModalFields()) {
-                return;
-            }
+            // Validate form
             const name = document.getElementById('modalName').value.trim();
             const phone = document.getElementById('modalPhone').value.trim();
             const address = document.getElementById('modalAddress').value.trim();
+            if (!name || !phone || !address) {
+                alert('Please fill in all contact details.');
+                return;
+            }
+            // Optionally, validate phone format
+            if (!validatePhone(phone)) {
+                alert('Please enter a valid phone number.');
+                return;
+            }
+            // Hide modal and show order form
             closeModal();
             document.getElementById('orderForm').style.display = 'block';
             document.getElementById('customerName').value = name;
             document.getElementById('phone').value = phone;
             document.getElementById('address').value = address;
             document.getElementById('notes').focus();
-            showConfirmModal({ name, phone, address, total: cartTotal + deliveryFee, items: cart });
+            // Show confirmation modal with details
+            showConfirmModal({
+                name,
+                phone,
+                address,
+                total: cartTotal + deliveryFee,
+                items: cart
+            });
         };
     }
-
+    // Confirm modal logic
     function showConfirmModal(details) {
+        // Fill confirmation details
         let html = `<p><strong>Order Confirmed!</strong></p>`;
-        html += `<p><strong>Total:</strong> $${details.total.toFixed(2)}</p>`;
+        html += `<p><strong>Total:</strong> £${details.total.toFixed(2)}</p>`;
         html += `<p><strong>Contact Details:</strong><br>Name: ${details.name}<br>Phone: ${details.phone}<br>Address: ${details.address}</p>`;
         html += `<p><strong>Items:</strong></p><ul>`;
         details.items.forEach(item => {
-            html += `<li>${item.name} x${item.quantity} ($${(item.price * item.quantity).toFixed(2)})</li>`;
+            html += `<li>${item.name} x${item.quantity} (£${(item.price * item.quantity).toFixed(2)})</li>`;
         });
         html += `</ul>`;
         confirmOrderDetails.innerHTML = html;
         confirmModal.style.display = 'flex';
-        const firstBtn = confirmModal.querySelector('.continue-btn') || confirmModal.querySelector('button');
-        if (firstBtn) firstBtn.focus();
     }
-
+    // Close/Reset basket
     if (closeBasketBtn) closeBasketBtn.onclick = function() {
         confirmModal.style.display = 'none';
         cart = [];
         updateCartDisplay();
-        try { localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart)); } catch(_) {}
         document.getElementById('orderForm').reset();
         document.getElementById('orderForm').style.display = 'none';
-        const startBtn = document.getElementById('startOrderBtn');
-        if (startBtn) startBtn.style.display = 'block';
-        if (lastFocusedElement) lastFocusedElement.focus();
+        document.getElementById('startOrderBtn').style.display = 'block';
     };
-
+    // Go back to contact details
     if (backToContactBtn) backToContactBtn.onclick = function() {
         confirmModal.style.display = 'none';
         document.getElementById('orderModal').style.display = 'flex';
-        const firstField = document.getElementById('modalName');
-        if (firstField) firstField.focus();
     };
-
+    // Close confirm modal
     if (closeConfirmBtn) closeConfirmBtn.onclick = function() {
         confirmModal.style.display = 'none';
-        if (lastFocusedElement) lastFocusedElement.focus();
     };
-
-    window.addEventListener('click', function(event) {
+    // Close modal on outside click
+    window.onclick = function(event) {
         if (event.target === modal) {
             closeModal();
         }
-        if (event.target === confirmModal) {
-            confirmModal.style.display = 'none';
-        }
-    });
+    };
 }
 
 // ===================================
@@ -689,7 +580,7 @@ function processContactForm(contactData) {
  * @returns {string} Formatted currency string
  */
 function formatCurrency(amount) {
-    return `$${amount.toFixed(2)}`;
+    return `£${amount.toFixed(2)}`;
 }
 
 /**
@@ -710,71 +601,6 @@ function validateEmail(email) {
 function validatePhone(phone) {
     const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
     return phoneRegex.test(phone.replace(/[\s\-\(\)]/g, ''));
-}
-
-// Inline error helpers
-function showError(input, message) {
-    clearError(input);
-    input.classList.add('input-invalid');
-    const err = document.createElement('div');
-    err.className = 'error-text';
-    err.textContent = message;
-    input.setAttribute('aria-invalid', 'true');
-    input.setAttribute('aria-describedby', input.id + '-error');
-    err.id = input.id + '-error';
-    input.parentElement.appendChild(err);
-}
-function clearError(input) {
-    input.classList.remove('input-invalid');
-    input.removeAttribute('aria-invalid');
-    input.removeAttribute('aria-describedby');
-    const existing = document.getElementById(input.id + '-error');
-    if (existing) existing.remove();
-}
-
-// Simple phone mask and normalization (digits and leading +)
-function setupPhoneMask(el) {
-    if (!el) return;
-    el.addEventListener('input', () => {
-        const start = el.selectionStart;
-        let v = el.value.replace(/[^\d+\s()-]/g, '');
-        // ensure only one leading +
-        v = v.replace(/(?!^)[+]/g, '');
-        el.value = v;
-        el.setSelectionRange(start, start);
-    });
-}
-
-// Enhance modal and order form validation
-function setupInlineValidation() {
-    const modalForm = document.getElementById('modalContactForm');
-    if (modalForm) {
-        const name = document.getElementById('modalName');
-        const phone = document.getElementById('modalPhone');
-        const address = document.getElementById('modalAddress');
-        [name, phone, address].forEach(i => i && i.addEventListener('input', () => clearError(i)));
-        setupPhoneMask(phone);
-    }
-    const orderForm = document.getElementById('orderForm');
-    if (orderForm) {
-        const name = document.getElementById('customerName');
-        const phone = document.getElementById('phone');
-        const address = document.getElementById('address');
-        [name, phone, address].forEach(i => i && i.addEventListener('input', () => clearError(i)));
-        setupPhoneMask(phone);
-    }
-}
-
-// Validate modal fields, show inline errors
-function validateModalFields() {
-    const name = document.getElementById('modalName');
-    const phone = document.getElementById('modalPhone');
-    const address = document.getElementById('modalAddress');
-    let ok = true;
-    if (!name.value.trim()) { showError(name, 'Please enter your full name.'); ok = false; }
-    if (!phone.value.trim() || !validatePhone(phone.value.trim())) { showError(phone, 'Enter a valid phone number (e.g. +441234567890).'); ok = false; }
-    if (!address.value.trim()) { showError(address, 'Please enter your delivery address.'); ok = false; }
-    return ok;
 }
 
 // ===================================
