@@ -400,6 +400,11 @@ p {
     color: #2c3e50;
 }
 
+/* Order page: spacing between main and footer */
+body.page-order main { 
+    margin-bottom: 20px; 
+}
+
 .cart-section {
     background: white;
     padding: 2rem;
