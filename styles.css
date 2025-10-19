@@ -416,6 +416,11 @@ body.page-order main {
     min-width: 340px;
 }
 
+/* Order page: center 'Your Basket' heading */
+.cart-section h2 {
+    text-align: center;
+}
+
 /* Update Start Order button colors */
 #startOrderBtn {
     margin-top: 1.5rem;
