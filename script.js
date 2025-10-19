@@ -107,14 +107,8 @@ function initializeOrderPage() {
         // Event listeners for controls
         document.getElementById('categorySelect').addEventListener('change', renderMenu);
         document.getElementById('sortSelect').addEventListener('change', renderMenu);
-        // Start order dialogue button
-        const startOrderBtn = document.getElementById('startOrderBtn');
-        if (startOrderBtn) {
-            startOrderBtn.addEventListener('click', function() {
-                document.getElementById('orderForm').style.display = 'block';
-                startOrderBtn.style.display = 'none';
-            });
-        }
+        // Start order dialogue button: handled by modal setup; do not reveal inline form here
+        // (Removed inline form show/hide to keep contact details strictly in modal)
         // Initialize cart display
         updateCartDisplay();
         // Set up order form submission
@@ -430,18 +424,12 @@ function setupOrderModal() {
                 alert('Please fill in all contact details.');
                 return;
             }
-            // Optionally, validate phone format
             if (!validatePhone(phone)) {
                 alert('Please enter a valid phone number.');
                 return;
             }
-            // Hide modal and show order form
+            // Keep the order form hidden; proceed entirely within modals
             closeModal();
-            document.getElementById('orderForm').style.display = 'block';
-            document.getElementById('customerName').value = name;
-            document.getElementById('phone').value = phone;
-            document.getElementById('address').value = address;
-            document.getElementById('notes').focus();
             // Show confirmation modal with details
             showConfirmModal({
                 name,

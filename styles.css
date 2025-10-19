@@ -583,6 +583,9 @@ body.page-order main {
     transform: none;
 }
 
+/* Ensure inline order form stays hidden (modal-only flow) */
+#orderForm[hidden] { display: none !important; }
+
 /* ===================================
    CONTACT PAGE STYLES
    =================================== */
