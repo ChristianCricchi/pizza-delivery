@@ -14,6 +14,7 @@
     --brand-green: #27ae60;
     --brand-green-dark: #219a52;
     --footer-text: #bdc3c7;
+    --header-height: 70px;
 }
 
 body {
@@ -21,7 +22,7 @@ body {
     line-height: 1.6;
     color: #333;
     background-color: #fff;
-    padding-top: 70px; /* offset fixed header height */
+    padding-top: var(--header-height); /* offset fixed header height */
 }
 
 .container {
@@ -289,6 +290,11 @@ p {
 
 .menu-cta {
     text-align: center;
+}
+
+/* Home: add space before footer */
+body.page-home main {
+    margin-bottom: 24px;
 }
 
 /* ===================================
@@ -858,6 +864,8 @@ footer {
         transition: 0.3s;
         box-shadow: 0 10px 27px rgba(0,0,0,0.05);
         padding: 2rem 0;
+        height: calc(100vh - 70px);
+        overflow-y: auto;
     }
 
     .nav-menu.active {
@@ -992,6 +1000,7 @@ footer {
     .logo h1 { font-size: 2rem; }
     /* Slightly taller on very large screens; keep sufficient body offset if needed */
     body { padding-top: 72px; }
+    :root { --header-height: 72px; }
 }
 
 @media screen and (min-width: 1600px) {
@@ -1038,7 +1047,7 @@ select:focus,
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 80vh;
+    min-height: calc(100vh - var(--header-height)); /* fill viewport under fixed header */
     background: linear-gradient(135deg, #e74c3c 60%, #f8f9fa 100%);
 }
 
@@ -1063,7 +1072,7 @@ select:focus,
 
 .welcome-text {
     text-align: left;
-    max-width: 400px;
+    max-width: 480px; /* was 400px */
 }
 
 .welcome-text h1 {
@@ -1079,7 +1088,7 @@ select:focus,
 }
 
 .welcome-image img {
-    width: 360px;
+    width: 420px; /* was 360px */
     height: auto;
     border-radius: 16px;
     box-shadow: 0 4px 16px rgba(44,62,80,0.12);
@@ -1089,7 +1098,7 @@ select:focus,
 /* Slightly larger on big screens */
 @media screen and (min-width: 1200px) {
     .welcome-text h1 { font-size: 3.4rem; }
-    .welcome-image img { width: 420px; }
+    .welcome-image img { width: 480px; /* was 420px */ }
 }
 
 /* Copyright Bar Styles */
