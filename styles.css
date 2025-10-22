@@ -291,6 +291,11 @@ p {
     text-align: center;
 }
 
+/* Home: add space before footer */
+body.page-home main {
+    margin-bottom: 24px;
+}
+
 /* ===================================
    ORDER PAGE STYLES
    =================================== */
